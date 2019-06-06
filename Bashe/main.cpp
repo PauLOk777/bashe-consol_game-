@@ -16,33 +16,37 @@ bool gameOver(int numberOfStones) { return numberOfStones; };
 int main() {
 	int numberOfStones;
 	int maxStonesInTurn;
-	int counterOfTurns = 0;
-	int levelOfBot = start(numberOfStones, maxStonesInTurn);
 	string winner;
-
-	while (gameOver(numberOfStones)) {
-		draw(numberOfStones);
-		if (counterOfTurns % 2 == 0) {
-			winner = gamerTurn(numberOfStones, maxStonesInTurn);
-			counterOfTurns++;
+	while (true) {
+		int levelOfBot = start(numberOfStones, maxStonesInTurn);
+		bool flag = true;
+		while (gameOver(numberOfStones)) {
+			draw(numberOfStones);
+			if (flag) {
+				winner = gamerTurn(numberOfStones, maxStonesInTurn);
+				flag = false;
+			}
+			else {
+				if (levelOfBot == 1) {
+					winner = easyBotsTurn(numberOfStones, maxStonesInTurn);
+				}
+				if (levelOfBot == 2) {
+					winner = mediumBotTurn(numberOfStones, maxStonesInTurn);
+				}
+				if (levelOfBot == 3) {
+					winner = hardBotTurn(numberOfStones, maxStonesInTurn);
+				}
+				flag = true;
+			}
+			system("cls");
 		}
-		else {
-			if (levelOfBot == 1) {
-				winner = easyBotsTurn(numberOfStones, maxStonesInTurn);
-			}
-			if (levelOfBot == 2) {
-				winner = mediumBotTurn(numberOfStones, maxStonesInTurn);
-			}
-			if (levelOfBot == 3) {
-				winner = hardBotTurn(numberOfStones, maxStonesInTurn);
-			}
-			counterOfTurns++;
-		}
+		cout << winner << endl;
+		cout << "Game over." << endl;
+		string trying = "";
+		cout << "Do you wanna play more? If yes type 1, no - any key."; cin >> trying;
 		system("cls");
+		if (trying != "1") break;
 	}
-
-	cout << winner << endl;
-	cout << "Game over." << endl;
 	system("pause");
 	return 0;
 }
@@ -125,6 +129,21 @@ string easyBotsTurn(int &numberOfStones, int maxStonesInTurn)
 
 string hardBotTurn(int &numberOfStones, int maxStonesInTurn)
 {
+	cout << "Bot thinking..." << endl;
+	Sleep(3000);
+	if (numberOfStones % (maxStonesInTurn + 1) == 0) {
+		int random = rand() % (maxStonesInTurn - 1) + 1;
+		numberOfStones -= random;
+	}
+	else {
+		int num;
+		for (int i = 1; i <= maxStonesInTurn; i++) {
+			if ((numberOfStones - i) % (maxStonesInTurn + 1) == 0) {
+				numberOfStones -= i;
+			}
+		}
+	}
+	if (!gameOver(numberOfStones)) { return "The bot wins!!!"; }
 	return "";
 }
 
