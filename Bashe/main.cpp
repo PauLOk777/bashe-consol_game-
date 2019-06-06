@@ -10,8 +10,9 @@ void draw(int);
 string gamerTurn(int&, int);
 string easyBotsTurn(int&, int);
 string hardBotTurn(int&, int);
-string mediumBotTurn(int&, int);
-bool gameOver(int numberOfStones) { return numberOfStones; };
+string mediumBotTurn(int&, int, bool&);
+bool gameOver(int numberOfStones) { return numberOfStones; }
+bool firstTurn();
 
 int main() {
 	int numberOfStones;
@@ -19,7 +20,8 @@ int main() {
 	string winner;
 	while (true) {
 		int levelOfBot = start(numberOfStones, maxStonesInTurn);
-		bool flag = true;
+		bool flag = firstTurn();
+		bool mediumFlag = true;
 		while (gameOver(numberOfStones)) {
 			draw(numberOfStones);
 			if (flag) {
@@ -31,7 +33,7 @@ int main() {
 					winner = easyBotsTurn(numberOfStones, maxStonesInTurn);
 				}
 				if (levelOfBot == 2) {
-					winner = mediumBotTurn(numberOfStones, maxStonesInTurn);
+					winner = mediumBotTurn(numberOfStones, maxStonesInTurn, mediumFlag);
 				}
 				if (levelOfBot == 3) {
 					winner = hardBotTurn(numberOfStones, maxStonesInTurn);
@@ -147,7 +149,29 @@ string hardBotTurn(int &numberOfStones, int maxStonesInTurn)
 	return "";
 }
 
-string mediumBotTurn(int &numberOfStones, int maxStonesInTurn)
+string mediumBotTurn(int &numberOfStones, int maxStonesInTurn, bool &flag)
 {
+	cout << "Bot thinking..." << endl;
+	Sleep(3000);
+	if (flag) {
+		easyBotsTurn(numberOfStones, maxStonesInTurn);
+		flag = false;
+	}
+	else {
+		hardBotTurn(numberOfStones, maxStonesInTurn);
+		flag = true;
+	}
+	if (!gameOver(numberOfStones)) { return "The bot wins!!!"; }
 	return "";
+}
+
+bool firstTurn() {
+	int num;
+	cout << "If you wanna start first type 1, if no - any number: "; cin >> num;
+	if (num == 1) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
