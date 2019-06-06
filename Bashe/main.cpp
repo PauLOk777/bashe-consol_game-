@@ -151,8 +151,6 @@ string hardBotTurn(int &numberOfStones, int maxStonesInTurn)
 
 string mediumBotTurn(int &numberOfStones, int maxStonesInTurn, bool &flag)
 {
-	cout << "Bot thinking..." << endl;
-	Sleep(3000);
 	if (flag) {
 		easyBotsTurn(numberOfStones, maxStonesInTurn);
 		flag = false;
@@ -169,9 +167,11 @@ bool firstTurn() {
 	int num;
 	cout << "If you wanna start first type 1, if no - any number: "; cin >> num;
 	if (num == 1) {
+		system("cls");
 		return true;
 	}
 	else {
+		system("cls");
 		return false;
 	}
 }
