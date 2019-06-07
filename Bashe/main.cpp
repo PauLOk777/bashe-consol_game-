@@ -11,6 +11,7 @@ string gamerTurn(int&, int);
 string easyBotsTurn(int&, int);
 string hardBotTurn(int&, int);
 string mediumBotTurn(int&, int, bool&);
+string unrealBotTurn(int&, int);
 bool gameOver(int numberOfStones) { return numberOfStones; }
 bool firstTurn();
 
@@ -18,6 +19,8 @@ int main() {
 	int numberOfStones;
 	int maxStonesInTurn;
 	string winner;
+	int botsScore = 0;
+	int playerScore = 0;
 	while (true) {
 		int levelOfBot = start(numberOfStones, maxStonesInTurn);
 		bool flag = firstTurn();
@@ -38,14 +41,25 @@ int main() {
 				if (levelOfBot == 3) {
 					winner = hardBotTurn(numberOfStones, maxStonesInTurn);
 				}
+				if (levelOfBot == 4) {
+					winner = unrealBotTurn(numberOfStones, maxStonesInTurn);
+				}
 				flag = true;
 			}
 			system("cls");
 		}
+		if (winner == "The bot wins!!!") {
+			botsScore++;
+		}
+		else {
+			playerScore++;
+		}
 		cout << winner << endl;
 		cout << "Game over." << endl;
+		cout << "Score (player - bot): " << endl;
+		cout << playerScore << " - " << botsScore << endl;
 		string trying = "";
-		cout << "Do you wanna play more? If yes type 1, no - any key."; cin >> trying;
+		cout << "Do you wanna play more? If yes type 1, no - any key: "; cin >> trying;
 		system("cls");
 		if (trying != "1") break;
 	}
@@ -64,7 +78,7 @@ int start(int& numberOfStones, int& maxStonesInTurn) {
 	cout << "Now input number of stones: "; cin >> numberOfStones;
 	cout << "Then input maximum number of stones per move that a player can take: "; cin >> maxStonesInTurn;
 	int level;
-	cout << "Change level of bot:\n"; cout << "1.Easy\n"; cout << "2.Medium\n"; cout << "3.Hard" << endl;
+	cout << "Change level of bot:\n"; cout << "1.Easy\n"; cout << "2.Medium\n"; cout << "3.Hard\n"; cout << "4.Unreal" << endl;
 	cout << "Input number: "; cin >> level;
 	system("cls");
 	return level;
@@ -158,6 +172,25 @@ string mediumBotTurn(int &numberOfStones, int maxStonesInTurn, bool &flag)
 	else {
 		hardBotTurn(numberOfStones, maxStonesInTurn);
 		flag = true;
+	}
+	if (!gameOver(numberOfStones)) { return "The bot wins!!!"; }
+	return "";
+}
+
+string unrealBotTurn(int& numberOfStones, int maxStonesInTurn)
+{
+	cout << "Bot thinking..." << endl;
+	Sleep(3000);
+	if (numberOfStones % (maxStonesInTurn + 1) == 0) {
+		numberOfStones -= (maxStonesInTurn + 1);
+	}
+	else {
+		int num;
+		for (int i = 1; i <= maxStonesInTurn; i++) {
+			if ((numberOfStones - i) % (maxStonesInTurn + 1) == 0) {
+				numberOfStones -= i;
+			}
+		}
 	}
 	if (!gameOver(numberOfStones)) { return "The bot wins!!!"; }
 	return "";
